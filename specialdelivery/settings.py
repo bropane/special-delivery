@@ -1,5 +1,5 @@
 """
-Django settings for special project on Heroku. Fore more info, see:
+Django settings for special-delivery project on Heroku. Fore more info, see:
 https://github.com/heroku/heroku-django-template
 
 For more information on this file, see
@@ -53,7 +53,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'special.urls'
+ROOT_URLCONF = 'specialdelivery.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'special.wsgi.application'
+WSGI_APPLICATION = 'specialdelivery.wsgi.application'
 
 
 # Database

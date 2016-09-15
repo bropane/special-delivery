@@ -1,1 +1,1 @@
-web: gunicorn special.wsgi
+web: gunicorn specialdelivery.wsgi
