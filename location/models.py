@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.utils.timezone import now
 
-# Create your models here.
-class Location:
-    gps_location = models.CharField(max_length=15)
-    timestamp = models.DateTimeField()
+
+class Location(models.Model):
+    gps_location = models.CharField(max_length=30)
     device_id = models.CharField(max_length=25)
+    timestamp = models.DateTimeField(default=now, blank=True)
