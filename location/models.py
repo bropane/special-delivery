@@ -8,3 +8,6 @@ class Location(models.Model):
     gps_location = models.CharField(max_length=30)
     device_id = models.CharField(max_length=25)
     timestamp = models.DateTimeField(default=now, blank=True)
+
+    class Meta:
+        ordering = ('-timestamp',)
