@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+
+class ConnectDevice(generics.CreateAPIView):
+
+        def post(self, request, format=None):
+            pass

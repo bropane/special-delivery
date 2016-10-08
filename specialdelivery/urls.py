@@ -20,5 +20,4 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^location/', include('location.urls')),
     url(r'^events/', include('event_handler.urls')),
-    url(r'^devices/', include('device_manager.urls')),
 ]

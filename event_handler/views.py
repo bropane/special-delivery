@@ -1,4 +1,4 @@
-from rest_framework.views import CreateAPIView
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from device_manager.models import Device
