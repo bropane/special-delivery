@@ -7,7 +7,7 @@ from models import Event
 from serializers import EventSerializer
 
 
-class CreateEvent(CreateAPIView):
+class CreateEventView(CreateAPIView):
     """
     View to receive events from hardware and add to DB
 
