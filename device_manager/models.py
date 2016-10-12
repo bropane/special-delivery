@@ -20,11 +20,6 @@ class Device(models.Model):
     # People who will receive email updates
     subscribers = models.ManyToManyField(User, related_name='subscribers')
 
-    def save(self, *args, **kwargs):
-        if not self.device_key:
-            self.device_key = self.generate_device_key()
-        super(Device, self).save(*args, **kwargs)
-
     def __str__(self):
         if self.name and not self.name.isspace():
             return self.name
