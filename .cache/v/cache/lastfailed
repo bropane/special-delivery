@@ -1,1 +1,3 @@
-{}
+{
+  "event_handler/tests/test_views.py::TestCreateEventView::()::test_post": true
+}

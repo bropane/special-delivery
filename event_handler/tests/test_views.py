@@ -3,7 +3,7 @@ import pytest
 from django.test import RequestFactory
 from mixer.backend.django import mixer
 
-from .. import Views
+from .. import views
 
 pytestmark = pytest.mark.django_db
 
