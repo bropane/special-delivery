@@ -4,5 +4,5 @@ from views import CreateEventView
 
 
 urlpatterns = [
-    url(r'^update$', CreateEventView),
+    url(r'^update$', CreateEventView.as_view()),
 ]

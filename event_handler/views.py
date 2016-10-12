@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
@@ -14,10 +16,11 @@ class CreateEventView(CreateAPIView):
     *Requires device_id
     """
 
-    def post(self, request, format=None):
-        device_id = request.data
+    def post(self, request):
+        device_id = request.data['coreid']
+        data = json.loads(request.data['data'])
         device = Device.objects.get(device_id=device_id)
-        event = Event(device=device, type=request.type,
-                      battery=request.battery)
+        event = Event(device=device, type=1,
+                      battery='test')
         event.save()
-        return Response()
+        return Response(request.data)
