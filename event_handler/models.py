@@ -9,8 +9,9 @@ from device_manager.models import Device
 class Event(models.Model):
     # 1: Status Update, 2: Movement Detected, 3: Config Change
     device = models.ForeignKey(Device)
-    type = models.IntegerField()
-    battery = models.CharField(max_length=12)
+    name = models.CharField(max_length=20)
+    code = models.IntegerField()
+    priority = models.IntegerField()
     timestamp = models.DateTimeField(default=now, blank=True)
 
     class Meta:
