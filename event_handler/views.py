@@ -24,6 +24,7 @@ class CreateEventView(CreateAPIView):
         data = json.loads(request.data['data'])
         try:
             device = Device.objects.get(device_id=device_id)
+            event = Event('')
         except Device.DoesNotExist:
             raise Http404
         return Response(data)
