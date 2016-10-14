@@ -1,5 +1,7 @@
 import json
 
+from django.http import Http404
+
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
@@ -15,12 +17,13 @@ class CreateEventView(CreateAPIView):
 
     *Requires device_id
     """
+    serializer_class = EventSerializer
 
     def post(self, request):
         device_id = request.data['coreid']
         data = json.loads(request.data['data'])
-        device = Device.objects.get(device_id=device_id)
-        event = Event(device=device, type=1,
-                      battery='test')
-        event.save()
-        return Response(request.data)
+        try:
+            device = Device.objects.get(device_id=device_id)
+        except Device.DoesNotExist:
+            raise Http404
+        return Response(data)
