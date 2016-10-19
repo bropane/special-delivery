@@ -4,6 +4,7 @@ from django.http import Http404
 
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
 
 from device_manager.models import Device
 
@@ -24,6 +25,8 @@ class CreateEventView(CreateAPIView):
         data = json.loads(request.data['data'])
         try:
             device = Device.objects.get(device_id=device_id)
+            if device.owner != request.user:
+                raise PermissionDenied
             event = Event(device=device, name=data['name'], code=data['code'],
                           priority=data['priority'])
             event.save()

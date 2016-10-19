@@ -9,6 +9,7 @@ from ..models import Event
 
 pytestmark = pytest.mark.django_db
 
+
 class TestEvent:
 
     def test_init(self):

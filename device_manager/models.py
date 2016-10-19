@@ -5,9 +5,12 @@ import random
 import string
 
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
 
 
 class Device(models.Model):
@@ -27,22 +30,7 @@ class Device(models.Model):
             return self.device_id
 
 
-class DevicesKey(models.Model):
-    """Key that is compiled with owner's devices to identify ownership.
-       Similar to API key"""
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    key = models.CharField(max_length=30, unique=True, blank=True)
-
-    # This gets called via a receiver when a User is saved
-    @staticmethod
-    def generate_device_key():
-        key = ''.join(random.SystemRandom().choice(
-            string.ascii_uppercase + string.digits) for _ in range(30))
-        return key
-
-
-@receiver(post_save, sender=User)
-def create_devices_key(sender, instance, created, **kwargs):
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
-        DevicesKey.objects.create(user=instance,
-                                  key=DevicesKey.generate_device_key)
+        Token.objects.create(user=instance)
