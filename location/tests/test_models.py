@@ -15,7 +15,8 @@ class TestLocation:
 
     def test_init(self):
         device = mixer.blend(Device)
-        loc = Location(position=Geoposition(52.3, -101.6), device=device)
+        pos = Geoposition(52.3, -101.6)
+        loc = Location(position=pos, device=device)
         loc.save()
         assert loc.pk == 1, "Should create instance of Event"
 

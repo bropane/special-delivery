@@ -22,11 +22,11 @@ class CreateEventView(CreateAPIView):
 
     def post(self, request):
         device_id = request.data['coreid']
-        data = json.loads(request.data['data'])
         try:
             device = Device.objects.get(device_id=device_id)
             if device.owner != request.user:
                 raise PermissionDenied
+            data = json.loads(request.data['data'])
             event = Event(device=device, name=data['name'], code=data['code'],
                           priority=data['priority'])
             event.save()

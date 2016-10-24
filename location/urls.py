@@ -4,5 +4,5 @@ import views
 
 
 urlpatterns = [
-    url(r'^update$', views.UpdateLocationView),
+    url(r'^update$', views.UpdateLocationView.as_view()),
 ]

@@ -6,4 +6,4 @@ from models import Location
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
-        fields = ('id', 'gps_location', 'device_id', 'timestamp')
+        fields = ('id', 'position', 'device', 'timestamp')
