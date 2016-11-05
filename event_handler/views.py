@@ -21,7 +21,7 @@ class CreateEventView(CreateAPIView):
     serializer_class = EventSerializer
 
     def post(self, request):
-        device_id = request.data['coreid']
+        device_id = request.data['device_id']
         try:
             device = Device.objects.get(device_id=device_id)
             if device.owner != request.user:
@@ -29,4 +29,3 @@ class CreateEventView(CreateAPIView):
             self.create(request)
         except Device.DoesNotExist:
             raise Http404
-        return Response(EventSerializer(event).data)
