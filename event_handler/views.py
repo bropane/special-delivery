@@ -26,10 +26,7 @@ class CreateEventView(CreateAPIView):
             device = Device.objects.get(device_id=device_id)
             if device.owner != request.user:
                 raise PermissionDenied
-            data = json.loads(request.data['data'])
-            event = Event(device=device, name=data['name'], code=data['code'],
-                          priority=data['priority'])
-            event.save()
+            self.create(request)
         except Device.DoesNotExist:
             raise Http404
         return Response(EventSerializer(event).data)

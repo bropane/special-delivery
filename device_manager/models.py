@@ -12,7 +12,6 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-
 class Device(models.Model):
     """Stores the device information in DB"""
     name = models.CharField(max_length=20, blank=True, null=True)
