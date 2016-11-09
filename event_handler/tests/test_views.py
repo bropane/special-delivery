@@ -1,10 +1,11 @@
 import json
 import pytest
 
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIClient
 from rest_framework.test import force_authenticate
 from mixer.backend.django import mixer
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 from .. import views
 
@@ -14,21 +15,44 @@ pytestmark = pytest.mark.django_db
 class TestCreateEventView:
 
     @pytest.fixture
-    def user(self):
-        return mixer.blend(User)
+    def user_owner(self):
+        return User.objects.create(email='test@email.com',
+                                   password='test',
+                                   username='I Own the Test Device')
 
     @pytest.fixture
-    def device(self, user):
+    def user(self):
+        return User.objects.create(email='test2@email.com',
+                                   password='test',
+                                   username='I am a random user')
+
+    @pytest.fixture
+    def device(self, user_owner):
         from device_manager.models import Device
-        return Device.objects.create(owner=user,
+        return Device.objects.create(owner=user_owner,
                                      device_id='testID',
                                      name="Test")
 
-    def test_post(self, device, user):
-        data = {"device": "testID", "name": "Armed",
+    @pytest.fixture
+    def data(self):
+        return {"device": "testID", "name": "Armed",
                 "value": "30", "code": "1", "priority": "3"}
-        req = APIRequestFactory().post('/events/update', data, format='json')
-        force_authenticate(req, user=user)
-        print req.user
-        resp = views.CreateEventView.as_view()(req)
-        assert resp.status_code == 404, 'Should throw 404 if not found'
+
+    def test_authenticated_post(self, device, user_owner, data):
+        token = Token.objects.get(user__username=user_owner.username)
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.post('/events/update', data, format='json')
+        assert response.status_code == 201, "Should post successfully"
+
+    def test_unauthenticated_post(self, device, data):
+        client = APIClient()
+        response = client.post('/events/update', data, format='json')
+        assert response.status_code != 201, "Should NOT post successfully"
+
+    def test_unauthorized_post(self, device, user, data):
+        token = Token.objects.get(user__username=user.username)
+        client = APIClient()
+        client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = client.post('/events/update', data, format='json')
+        assert response.status_code != 201, "Should NOT post successfully"

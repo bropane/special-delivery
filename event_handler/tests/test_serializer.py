@@ -40,10 +40,7 @@ class TestEventSerializer:
                 \"value\":\"30\",\"name\":\"Armed\"}"
         stream = BytesIO(json)
         data = JSONParser().parse(stream)
-        print data
         serializer = EventSerializer(data=data)
         assert serializer.is_valid(), 'Should deserialize properly to dict'
-        for k, v in serializer.validated_data.items():
-            print(k, v)
         event = serializer.save()
         assert event.pk, 'Should save an event from JSON'
