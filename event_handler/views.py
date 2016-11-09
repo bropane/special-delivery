@@ -21,11 +21,13 @@ class CreateEventView(CreateAPIView):
     serializer_class = EventSerializer
 
     def post(self, request):
-        device_id = request.data['device_id']
+        device_id = request.data['device']
         try:
             device = Device.objects.get(device_id=device_id)
             if device.owner != request.user:
                 raise PermissionDenied
+            request.data['priority'] = int(request.data['priority'])
+            request.data['code'] = int(request.data['code'])
             self.create(request)
         except Device.DoesNotExist:
             raise Http404
