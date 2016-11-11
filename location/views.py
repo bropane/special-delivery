@@ -17,18 +17,11 @@ class UpdateLocationView(CreateAPIView):
     serializer_class = LocationSerializer
 
     def post(self, request):
-        device_id = request.data['coreid']
+        device_id = request.data['device']
         try:
             device = Device.objects.get(device_id=device_id)
             if device.owner != request.user:
                 raise PermissionDenied
-            data = json.loads(request.data['data'])
-            position = data['position'].split(',')
-            latitude = position[0]
-            longitude = position[1]
-            position = Geoposition(latitude=latitude, longitude=longitude)
-            location = Location(position=position, device=device)
-            location.save()
+            return self.create(request)
         except Device.DoesNotExist:
             raise Http404
-        return Response(LocationSerializer(location).data)

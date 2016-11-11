@@ -1,8 +1,6 @@
-import json
 import pytest
 
 from rest_framework.test import APIClient
-from rest_framework.test import force_authenticate
 from mixer.backend.django import mixer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
