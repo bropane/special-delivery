@@ -1,5 +1,7 @@
 import pytest
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from mixer.backend.django import mixer
 
 from device_manager.models import Device
@@ -17,10 +19,15 @@ class TestEvent:
         event = mixer.blend(Event, device=mixer.SELECT)
         assert event.pk == 1, "Should create instance of Event"
 
-    def test_ordering(self):
+    # def test_ordering(self):
+    #     device = mixer.blend(Device)
+    #     events = mixer.cycle(100).blend(Event, device=mixer.SELECT)
+    #     ordered_events = Event.objects.all()
+    #     time1 = ordered_events[0].timestamp
+    #     time2 = ordered_events[len(ordered_events)-1].timestamp
+    #     assert time1 > time2, "Should order events from newest first"
+
+    def test_notification(self):
         device = mixer.blend(Device)
-        events = mixer.cycle(100).blend(Event, device=mixer.SELECT)
-        ordered_events = Event.objects.all()
-        time1 = ordered_events[0].timestamp
-        time2 = ordered_events[len(ordered_events)-1].timestamp
-        assert time1 > time2, "Should order events from newest first"
+        event = Event(device=device, name='Test Event', priority=3)
+        event.save()
