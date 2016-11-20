@@ -17,3 +17,16 @@ class Event(models.Model):
 
     class Meta:
         ordering = ('-timestamp',)
+
+@receiver(post_save, sender=Event)
+def send_notifications(sender, instance=None, created=False, **kwargs):
+    if created:
+        if instance.priority > 2:
+            device = instance.device
+            receiver = device.owner.email
+            subject = str.format("Event: {0}", str(device),
+                                 instance.name)
+            body = str.format("Value: {0}", instance.code)
+            mailer = FakeMailer()
+            mailer.mail(device, receiver, subject, body)
+            assert mailer.has_mailed() == True, 'Should try and send mail'

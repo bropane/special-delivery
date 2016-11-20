@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from mixer.backend.django import mixer
 
 from device_manager.models import Device
+from mailer.tests.fake_mailer import FakeMailer
 
 from ..models import Event
 
