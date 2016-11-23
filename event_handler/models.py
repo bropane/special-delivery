@@ -1,9 +1,14 @@
 from __future__ import unicode_literals
+import os
 
 from django.db import models
 from django.utils.timezone import now
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 from device_manager.models import Device
+from mailer.mailer import Mailer
+from mailer.tests.fake_mailer import FakeMailer
 
 
 class Event(models.Model):
@@ -24,9 +29,11 @@ def send_notifications(sender, instance=None, created=False, **kwargs):
         if instance.priority > 2:
             device = instance.device
             receiver = device.owner.email
-            subject = str.format("Event: {0}", str(device),
-                                 instance.name)
-            body = str.format("Value: {0}", instance.code)
-            mailer = FakeMailer()
-            mailer.mail(device, receiver, subject, body)
-            assert mailer.has_mailed() == True, 'Should try and send mail'
+            subject = 'Device: {} | Event {}'.format(device.name, instance.name)
+            body = "Value {}".format(instance.code)
+            if os.getenv('MAILING', False):
+                mailer = Mailer
+            else:
+                mailer = FakeMailer()
+                print "Using Fake Mailer"
+            return mailer.mail(device, receiver, subject, body)
