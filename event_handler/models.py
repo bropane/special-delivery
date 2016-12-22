@@ -32,7 +32,7 @@ def send_notifications(sender, instance=None, created=False, **kwargs):
             subject = 'Device: {} | Event {}'.format(device.name, instance.name)
             body = "Value {}".format(instance.code)
             if os.getenv('MAILING', False):
-                mailer = Mailer
+                mailer = Mailer()
             else:
                 mailer = FakeMailer()
                 print "Using Fake Mailer"
